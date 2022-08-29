@@ -1,7 +1,7 @@
 package com.radcom.javaGuildRadcom;
 
-import com.radcom.javaGuildRadcom.dao.CustomerMongoRepository;
-import com.radcom.javaGuildRadcom.model.mongo.Customer;
+import com.radcom.javaGuildRadcom.mongo.CustomerMongoRepository;
+import com.radcom.javaGuildRadcom.mongo.Customer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,12 +16,12 @@ import org.testcontainers.utility.DockerImageName;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Testcontainers
 @SpringBootTest
-public class MongoDbTestContainersDemo {
+public class MongoDbTestContainersDemoTest {
 
     @Container
     static final MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:4.0.10"));
@@ -31,7 +31,7 @@ public class MongoDbTestContainersDemo {
 
     @DynamicPropertySource
     public static void changeConnectionString (DynamicPropertyRegistry registry){
-        registry.add("mongodb.connectionstring", () -> mongoDBContainer.getConnectionString());
+        registry.add("mongodb.connectionstring", mongoDBContainer::getConnectionString);
     }
 
     @BeforeAll
@@ -40,7 +40,6 @@ public class MongoDbTestContainersDemo {
         var containerConnectionString = mongoDBContainer.getConnectionString();
         System.out.println("Connection string: " + containerConnectionString);
         System.out.println(mongoDBContainer.getContainerInfo());
-        System.out.println(mongoDBContainer.getBoundPortNumbers());
         System.out.println(mongoDBContainer.getExposedPorts());
         System.out.println(mongoDBContainer.getFirstMappedPort());
     }
