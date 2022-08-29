@@ -1,4 +1,4 @@
-package com.radcom.javaGuildRadcom.model.mongo;
+package com.radcom.javaGuildRadcom.mongo;
 
 
 import org.springframework.data.annotation.Id;
