@@ -18,6 +18,11 @@ public class Customer {
     public Customer() {
     }
 
+    public Customer(String email, Integer rating) {
+        this.email = email;
+        this.rating = rating;
+    }
+
     public Customer(String id, String email, Integer rating) {
         this.id = id;
         this.email = email;
