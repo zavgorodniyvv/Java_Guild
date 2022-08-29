@@ -1,6 +1,5 @@
-package com.radcom.javaGuildRadcom.dao;
+package com.radcom.javaGuildRadcom.mongo;
 
-import com.radcom.javaGuildRadcom.model.mongo.Customer;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface CustomerMongoRepository extends MongoRepository<Customer, String> {
