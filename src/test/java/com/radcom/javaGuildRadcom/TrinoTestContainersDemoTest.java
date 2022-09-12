@@ -25,7 +25,7 @@ public class TrinoTestContainersDemoTest {
     @Container
     public static TrinoContainer trino = new TrinoContainer(DockerImageName.parse("trinodb/trino"));
 //            .withDatabaseName("testDB")
-//            .withUsername("user")
+//            .withUsername("user");
 //            .withPassword("Radcom_01");
 
     static Connection connection;
@@ -48,6 +48,7 @@ public class TrinoTestContainersDemoTest {
         statement.execute(CREATE_HIVE);
         statement.execute(CREATE_SAMSUNG_TABLE);
         statement.execute(CREATE_DATA);
+        System.out.println(trino.getLogs());
         System.out.println();
     }
 
