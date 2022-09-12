@@ -38,6 +38,9 @@ public class KafkaTestContainerDemoTest {
 
     protected static Consumer<CreateContainerCmd> cmd = e -> e.withPortBindings(new PortBinding(Ports.Binding.bindPort(10800), new ExposedPort(10800)));
 
+    static Producer<String, String> producer;
+    static KafkaConsumer<String, String> consumer;
+
     @Container
     protected static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:6.2.1"));
 
@@ -61,35 +64,6 @@ public class KafkaTestContainerDemoTest {
         }
 
 //        //Create producer
-//        Properties producerProperties = new Properties();
-//        producerProperties.put("bootstrap.servers", kafka.getBootstrapServers());
-//        producerProperties.put("retries", 0);
-//        producerProperties.put("batch.size", 16384);
-//        producerProperties.put("linger.ms", 1);
-//        producerProperties.put("buffer.memory", 33554432);
-//        producerProperties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-//        producerProperties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-//        Producer<String, String> producer = new KafkaProducer<String, String>(producerProperties);
-//        System.out.println();
-//
-//        //Create consumer
-//        Properties consumerProperties = new Properties();
-//        consumerProperties.put("bootstrap.servers", kafka.getBootstrapServers());
-//        consumerProperties.put("group.id", "packet-retrieval");
-//        consumerProperties.put("enable.auto.commit", "true");
-//        consumerProperties.put("auto.commit.interval.ms", "1000");
-//        consumerProperties.put("session.timeout.ms", "30000");
-//        consumerProperties.put("auto.offset.reset", "earliest");
-//        consumerProperties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-//        consumerProperties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-//        KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(consumerProperties);
-//        consumer.subscribe(Arrays.asList(TOPIC));
-
-    }
-
-    @Test
-    void tetMethod() throws ExecutionException, InterruptedException {
-        //Create producer
         Properties producerProperties = new Properties();
         producerProperties.put("bootstrap.servers", kafka.getBootstrapServers());
         producerProperties.put("retries", 0);
@@ -98,10 +72,10 @@ public class KafkaTestContainerDemoTest {
         producerProperties.put("buffer.memory", 33554432);
         producerProperties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         producerProperties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        Producer<String, String> producer = new KafkaProducer<String, String>(producerProperties);
+        producer = new KafkaProducer<String, String>(producerProperties);
         System.out.println();
 
-        //Create consumer
+//        //Create consumer
         Properties consumerProperties = new Properties();
         consumerProperties.put("bootstrap.servers", kafka.getBootstrapServers());
         consumerProperties.put("group.id", "packet-retrieval");
@@ -111,8 +85,13 @@ public class KafkaTestContainerDemoTest {
         consumerProperties.put("auto.offset.reset", "earliest");
         consumerProperties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         consumerProperties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(consumerProperties);
+        consumer = new KafkaConsumer<String, String>(consumerProperties);
         consumer.subscribe(Arrays.asList(TOPIC));
+
+    }
+
+    @Test
+    void tetMethod() {
 
         producer.send(new ProducerRecord<>(TOPIC, "kafka Key", "Kafka value"));
         boolean shouldRun = true;
