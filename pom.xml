@@ -91,6 +91,18 @@
             <version>2.9.0</version>
         </dependency>
 
+        <!--        Ignite dependencies-->
+        <dependency>
+            <groupId>org.gridgain</groupId>
+            <artifactId>ignite-core</artifactId>
+            <version>8.8.13</version>
+        </dependency>
+        <dependency>
+            <groupId>org.gridgain</groupId>
+            <artifactId>ignite-spring</artifactId>
+            <version>8.8.13</version>
+        </dependency>
+
 
     </dependencies>
     <dependencyManagement>
@@ -113,5 +125,42 @@
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+            <id>radcom</id>
+            <name>radcom</name>
+            <url>http://nexus3-prod.radcom.co.il:8081/repository/radcom</url>
+        </repository>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+            <id>maveriq</id>
+            <name>maveriq</name>
+            <url>http://nexus-prod.radcom.co.il:8081/nexus/content/groups/maveriq</url>
+        </repository>
+        <repository>
+            <id>GridGain External Repository</id>
+            <url>http://www.gridgainsystems.com/nexus/content/repositories/external</url>
+        </repository>
+    </repositories>
 
 </project>
