@@ -1,9 +1,5 @@
 package com.radcom.javaGuildRadcom;
 
-import com.github.dockerjava.api.command.CreateContainerCmd;
-import com.github.dockerjava.api.model.ExposedPort;
-import com.github.dockerjava.api.model.PortBinding;
-import com.github.dockerjava.api.model.Ports;
 import org.apache.kafka.clients.admin.Admin;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.CreateTopicsResult;
@@ -24,19 +20,18 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
-import java.util.function.Consumer;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Testcontainers
 @SpringBootTest
-public class KafkaTestContainerDemoTest {
+class KafkaTestContainerDemoTest {
 
     private static final String TOPIC = "packetsAndStats";
-
-    protected static Consumer<CreateContainerCmd> cmd = e -> e.withPortBindings(new PortBinding(Ports.Binding.bindPort(10800), new ExposedPort(10800)));
 
     static Producer<String, String> producer;
     static KafkaConsumer<String, String> consumer;
@@ -72,7 +67,7 @@ public class KafkaTestContainerDemoTest {
         producerProperties.put("buffer.memory", 33554432);
         producerProperties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         producerProperties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        producer = new KafkaProducer<String, String>(producerProperties);
+        producer = new KafkaProducer<>(producerProperties);
         System.out.println();
 
 //        //Create consumer
@@ -85,22 +80,25 @@ public class KafkaTestContainerDemoTest {
         consumerProperties.put("auto.offset.reset", "earliest");
         consumerProperties.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         consumerProperties.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        consumer = new KafkaConsumer<String, String>(consumerProperties);
-        consumer.subscribe(Arrays.asList(TOPIC));
+        consumer = new KafkaConsumer<>(consumerProperties);
+        consumer.subscribe(List.of(TOPIC));
 
     }
 
     @Test
     void tetMethod() {
-
-        producer.send(new ProducerRecord<>(TOPIC, "kafka Key", "Kafka value"));
+        String KAFKA_KEY = "kafka Key";
+        String KAFKA_VALUE = "Kafka value";
+        producer.send(new ProducerRecord<>(TOPIC, KAFKA_KEY, KAFKA_VALUE));
         boolean shouldRun = true;
         while (shouldRun) {
             ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
             for (ConsumerRecord<String, String> record : records) {
 
-                System.out.printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! offset = %d, key = %s, value = %s\n",
-                        record.offset(), record.key(), record.value());
+                System.out.printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! offset = %d, key = %s, value = %s\n",
+                                                                        record.offset(), record.key(), record.value());
+                assertEquals(KAFKA_KEY, record.key());
+                assertEquals(KAFKA_VALUE, record.value());
                 shouldRun = false;
             }
         }
