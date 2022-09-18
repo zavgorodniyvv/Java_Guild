@@ -95,8 +95,8 @@ class KafkaTestContainerDemoTest {
             ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
             for (ConsumerRecord<String, String> record : records) {
 
-                System.out.printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! offset = %d, key = %s, value = %s\n",
-                        record.offset(), record.key(), record.value());
+                System.out.printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! offset = %d, key = %s, value = %s\n",
+                                                                        record.offset(), record.key(), record.value());
                 assertEquals(KAFKA_KEY, record.key());
                 assertEquals(KAFKA_VALUE, record.value());
                 shouldRun = false;
